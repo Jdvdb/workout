@@ -28,6 +28,7 @@ public class mainFrame extends JFrame {
     public static int numberOfExercises = 0;
     public static int currentIntensity = 0;
     public static boolean workoutStart = true;
+    public static int totalTimeCounter;
     //make variables to assign intensity to
     
     
@@ -37,16 +38,15 @@ public class mainFrame extends JFrame {
     }
     public static void workoutCountdownClock(int i,int e) {// e = current round
         Timer easyCountdownTimer;
-        easyCountdownTimer = new Timer(500, new ActionListener() {//change number to 1000 for final
+        easyCountdownTimer = new Timer(50, new ActionListener() {//change number to 1000 for final
             int time = 15 + (i * 15);
             int intensity = i;
             int exercises = e;
             boolean check = true;
             public void actionPerformed(ActionEvent e) {
-
                 if (time > 1) {
                     workoutPanel.timeExerciseLabel.setText("" + time);
-                    System.out.println("time remaining " + time);
+                    //System.out.println("time remaining " + time);
                     time--;                    
                 }  
                 else if (time == 1 && check) {
@@ -63,19 +63,20 @@ public class mainFrame extends JFrame {
     }
     public static void workoutCountdownBreak(int i,int e) {// e = current round
         Timer easyCountdownBreak;
-        easyCountdownBreak = new Timer(500, new ActionListener() {//change number to 1000 for final
+        easyCountdownBreak = new Timer(50, new ActionListener() {//change number to 1000 for final
             int time = 15;
             int intensity = i;
             int exercises = e-1;
             boolean check = true;
             public void actionPerformed(ActionEvent e) {
+
                 if (time > 1) {
                     workoutPanel.timeExerciseLabel.setText("" + time);
-                    System.out.println("time remaining " + time);
+                    //System.out.println("time remaining " + time);
                     time--;
                 }  
                 else {
-                    if (exercises == 1 && check) {
+                    if (exercises == 0 && check) {
                         numberOfExercises--;
                         workoutPanel.timeExerciseLabel.setText("" + 1);
                         System.out.println("------------Finish Rep--------------" + intensity);
@@ -97,7 +98,7 @@ public class mainFrame extends JFrame {
     
     
     public static void workoutTimeLeftClock(int i) {//i = difficulty e = # of exercises 
-        Timer workoutTime = new Timer(500, new ActionListener() {
+        Timer workoutTime = new Timer(50, new ActionListener() {
             int time = i;            
             public void actionPerformed(ActionEvent e) {
                 if (time > 0) {
@@ -240,7 +241,7 @@ public class mainFrame extends JFrame {
         return answer;
     }
     public static void workoutAssemble(int i) {//make String
-        System.out.println(i);
+        //System.out.println(i);
         //i = intensity e = # of exercises
         /* Intensity works in sets of three
         easy = 45 x 3 = 135
@@ -269,11 +270,11 @@ public class mainFrame extends JFrame {
         }
         
         if (numberOfExercises > 0) {
-            System.out.println(i);
+            //.println(i);
    switch (currentIntensity) {//check medulo of rounds
             case 1:  
                 workoutCountdownClock(1, 3);
-                            System.out.println(i + "lvl 1");
+                            //System.out.println(i + "lvl 1");
                      break;
             case 2:
                 if (numberOfExercises % 3 > 0) {
@@ -323,27 +324,22 @@ public class mainFrame extends JFrame {
                      break;
             case 8: 
                 if (numberOfExercises % 3 > 1) {
-                    workoutCountdownClock(1,3);
-                                    System.out.println(i + "lvl 8"); 
+                    workoutCountdownClock(1,3); 
                 }
                 else {
                     workoutCountdownClock(3,6);
-                                    System.out.println(i + "lvl 8"); 
                 }
                      break;
             case 9: 
                 if (numberOfExercises % 3 > 1) {
                     workoutCountdownClock(2,4);
-                                    System.out.println(i + "lvl 9"); 
                 }
                 else {
-                    workoutCountdownClock(3,6);
-                                    System.out.println(i + "lvl 9"); 
+                    workoutCountdownClock(3,6); 
                 }                
                      break;
             case 10:
-                workoutCountdownClock(3,6);
-                System.out.println(i + "lvl 10");                
+                workoutCountdownClock(3,6);             
                      break;
             default:
                      break;
