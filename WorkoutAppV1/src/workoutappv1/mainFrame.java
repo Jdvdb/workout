@@ -27,6 +27,7 @@ public class mainFrame extends JFrame {
     private static WorkoutPanel workoutPanel;
     private static JFrame frame;
     private static JPanel back;
+    public static int timerTotal = 50;
     public static int numberOfExercises = 0;
     public static int currentIntensity = 0;
     public static boolean workoutStart = true;
@@ -35,10 +36,10 @@ public class mainFrame extends JFrame {
     
     public static String[][] workoutData = {
             {"", "Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
-            {"", "Pull ups with TRX", "One leg squats with TRX", "Row with TRX", "Tricep Extensions with TRX", "Plank with TRX", "Side plank with TRX"},//TRX 6
             {"", "Military press ", "Bicep curl", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
+            {"", "Pull ups with TRX", "One leg squats with TRX", "Row with TRX", "Tricep Extensions with TRX", "Plank with TRX", "Side plank with TRX"},//TRX 6
+            {"", "Russian twists with med ball", "Squat with med ball", "Crunches with med ball", "Tricep pushup on Med Ball", "Superman with med ball", "Kneeling wood chops with med ball", "Squat with halo and med ball", "Lunge and twist with med ball", "Single leg deadlift with med ball"},//Med Ball 9                        
             {"", "Ab crunches on yoga ball", "Oblique lifts", "Back lift", "Seated balance", "Push-up with legs on Yoga Ball", "Plank with legs elevated on yoga ball"},//Ball 6
-            {"", "Russian twists with med ball", "Squat with med ball", "Crunches with med ball", "Tricep pushup on Med Ball", "Superman with med ball", "Kneeling wood chops with med ball", "Squat with halo and med ball", "Lunge and twist with med ball", "Single leg deadlift with med ball"},//Med Ball 9
         };//30 different exercises
     //make variables to assign intensity to
     
@@ -48,8 +49,16 @@ public class mainFrame extends JFrame {
         
     }
     public static void workoutCountdownClock(int i,int e) {// e = current round
+        if (numberOfExercises == 0) {
+            workoutPanel.nextExerciseLabel.setText("Done!");
+        }
+        else {
+            workoutPanel.currentExerciseLabel.setText(workoutStrings.get(numberOfExercises-1));
+            workoutPanel.nextExerciseLabel.setText(workoutStrings.get(numberOfExercises-2));
+        }
+        
         Timer easyCountdownTimer;
-        easyCountdownTimer = new Timer(50, new ActionListener() {//change number to 1000 for final
+        easyCountdownTimer = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
             int time = 15 + (i * 15);
             int intensity = i;
             int exercises = e;
@@ -57,8 +66,7 @@ public class mainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (time > 1) {
                     workoutPanel.timeExerciseLabel.setText("" + time);
-                    //System.out.println("time remaining " + time);
-                    workoutPanel.nextExerciseLabel.setText(" Break ");                    
+                    //System.out.println("time remaining " + time);                    
                     time--;                    
                 }  
                 else if (time == 1 && check) {
@@ -74,8 +82,9 @@ public class mainFrame extends JFrame {
         easyCountdownTimer.start();
     }
     public static void workoutCountdownBreak(int i,int e) {// e = current round
+        workoutPanel.currentExerciseLabel.setText("Break");
         Timer easyCountdownBreak;
-        easyCountdownBreak = new Timer(50, new ActionListener() {//change number to 1000 for final
+        easyCountdownBreak = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
             int time = 15;
             int intensity = i;
             int exercises = e-1;
@@ -111,7 +120,7 @@ public class mainFrame extends JFrame {
     
     
     public static void workoutTimeLeftClock(int i) {//i = difficulty e = # of exercises 
-        Timer workoutTime = new Timer(50, new ActionListener() {
+        Timer workoutTime = new Timer(timerTotal, new ActionListener() {
             int time = i;            
             public void actionPerformed(ActionEvent e) {
                 if (time > 0) {
@@ -267,7 +276,7 @@ public class mainFrame extends JFrame {
             switch (j) {
                 case 0:
                     if (noWeights) {
-                        double i = Math.random()*6.0;
+                        double i = Math.random()*8.0;
                         int currentNumber = (int) (i+1);
                         boolean fail = false;
                         for (int test = 0; test < exercises; test++) {
@@ -291,22 +300,98 @@ public class mainFrame extends JFrame {
                     break;
                 case 1:
                     if (weights) {
-                        
+                        double i = Math.random()*6.0;
+                        int currentNumber = (int) (i+1);
+                        boolean fail = false;
+                        for (int test = 0; test < exercises; test++) {
+                            System.out.println("j = " + j + " = " + workoutNumbers[test][0] + " currentNumber = " + currentNumber + " = " + workoutNumbers[test][1] );
+                            if (j == workoutNumbers[test][0] && currentNumber == workoutNumbers[test][1]) {
+                                fail = true;
+                            }
+                        }
+                        if (!fail) {
+                            workoutNumbers[e-1][0] = j;
+                            workoutNumbers[e-1][1] = currentNumber;
+                            System.out.println(workoutData[j][currentNumber]);
+                            workoutStrings.add(workoutData[j][currentNumber]);
+                            e--;
+                        }
+                        else {
+                            System.out.println(workoutData[j][currentNumber]);
+                            System.out.println("Fail");                            
+                        }                        
                     }                    
                     break;
                 case 2:
                     if (trx) {
-                        
+                        double i = Math.random()*6.0;
+                        int currentNumber = (int) (i+1);
+                        boolean fail = false;
+                        for (int test = 0; test < exercises; test++) {
+                            System.out.println("j = " + j + " = " + workoutNumbers[test][0] + " currentNumber = " + currentNumber + " = " + workoutNumbers[test][1] );
+                            if (j == workoutNumbers[test][0] && currentNumber == workoutNumbers[test][1]) {
+                                fail = true;
+                            }
+                        }
+                        if (!fail) {
+                            workoutNumbers[e-1][0] = j;
+                            workoutNumbers[e-1][1] = currentNumber;
+                            System.out.println(workoutData[j][currentNumber]);
+                            workoutStrings.add(workoutData[j][currentNumber]);
+                            e--;
+                        }
+                        else {
+                            System.out.println(workoutData[j][currentNumber]);
+                            System.out.println("Fail");                            
+                        }                        
                     }                    
                     break;
                 case 3:
                     if (medBall) {
-                        
+                        double i = Math.random()*9.0;
+                        int currentNumber = (int) (i+1);
+                        boolean fail = false;
+                        for (int test = 0; test < exercises; test++) {
+                            System.out.println("j = " + j + " = " + workoutNumbers[test][0] + " currentNumber = " + currentNumber + " = " + workoutNumbers[test][1] );
+                            if (j == workoutNumbers[test][0] && currentNumber == workoutNumbers[test][1]) {
+                                fail = true;
+                            }
+                        }
+                        if (!fail) {
+                            workoutNumbers[e-1][0] = j;
+                            workoutNumbers[e-1][1] = currentNumber;
+                            System.out.println(workoutData[j][currentNumber]);
+                            workoutStrings.add(workoutData[j][currentNumber]);
+                            e--;
+                        }
+                        else {
+                            System.out.println(workoutData[j][currentNumber]);
+                            System.out.println("Fail");                            
+                        }                        
                     }                    
                     break;
                 default:
                     if (ball) {
-                        
+                        double i = Math.random()*6.0;
+                        int currentNumber = (int) (i+1);
+                        boolean fail = false;
+                        for (int test = 0; test < exercises; test++) {
+                            System.out.println("j = " + j + " = " + workoutNumbers[test][0] + " currentNumber = " + currentNumber + " = " + workoutNumbers[test][1] );
+                            if (j == workoutNumbers[test][0] && currentNumber == workoutNumbers[test][1]) {
+                                fail = true;
+                            }
+                        }
+                        if (!fail) {
+                            workoutNumbers[e-1][0] = j;
+                            workoutNumbers[e-1][1] = currentNumber;
+                            System.out.println(workoutData[j][currentNumber]);
+                            workoutStrings.add(workoutData[j][currentNumber]);
+                            e--;
+                        }
+                        else {
+                            System.out.println(workoutData[j][currentNumber]);
+                            System.out.println("Fail");                            
+                        }                        
                     }                    
                     break;
             }
