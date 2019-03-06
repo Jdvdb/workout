@@ -13,6 +13,7 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.event.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 /**
  *
@@ -33,11 +34,11 @@ public class mainFrame extends JFrame {
     public static LinkedList<String> workoutStrings = new LinkedList<String>();
     
     public static String[][] workoutData = {
-            {"Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
-            {"Pull ups with TRX", "One leg squats with TRX", "Row with TRX", "Tricep Extensions with TRX", "Plank with TRX", "Side plank with TRX"},//TRX 6
-            {"Military press ", "Bicep curl", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
-            {"Ab crunches on yoga ball", "Oblique lifts", "Back lift", "Seated balance", "Push-up with legs on Yoga Ball", "Plank with legs elevated on yoga ball"},//Ball 6
-            {"Russian twists with med ball", "Squat with med ball", "Crunches with med ball", "Tricep pushup on Med Ball", "Superman with med ball", "Kneeling wood chops with med ball", "Squat with halo and med ball", "Lunge and twist with med ball", "Single leg deadlift with med ball"},//Med Ball 9
+            {"", "Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
+            {"", "Pull ups with TRX", "One leg squats with TRX", "Row with TRX", "Tricep Extensions with TRX", "Plank with TRX", "Side plank with TRX"},//TRX 6
+            {"", "Military press ", "Bicep curl", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
+            {"", "Ab crunches on yoga ball", "Oblique lifts", "Back lift", "Seated balance", "Push-up with legs on Yoga Ball", "Plank with legs elevated on yoga ball"},//Ball 6
+            {"", "Russian twists with med ball", "Squat with med ball", "Crunches with med ball", "Tricep pushup on Med Ball", "Superman with med ball", "Kneeling wood chops with med ball", "Squat with halo and med ball", "Lunge and twist with med ball", "Single leg deadlift with med ball"},//Med Ball 9
         };//30 different exercises
     //make variables to assign intensity to
     
@@ -260,24 +261,31 @@ public class mainFrame extends JFrame {
         boolean medBall = randomSelectPanel.medicineBallBox.isSelected();
         boolean ball = randomSelectPanel.ballBox.isSelected();
         int[][] workoutNumbers = new int[e][2];
+        int exercises = e;
         while (e > 0) {
             int j = randomWorkoutNumber();
             switch (j) {
                 case 0:
                     if (noWeights) {
                         double i = Math.random()*6.0;
-                        int currentNumber = (int) i;
+                        int currentNumber = (int) (i+1);
                         boolean fail = false;
-                        for (int test = 0; test < e; test++) {
-                            if (j == workoutNumbers[e-1][0] && currentNumber == workoutNumbers[e-1][1]) {
+                        for (int test = 0; test < exercises; test++) {
+                            System.out.println("j = " + j + " = " + workoutNumbers[test][0] + " currentNumber = " + currentNumber + " = " + workoutNumbers[test][1] );
+                            if (j == workoutNumbers[test][0] && currentNumber == workoutNumbers[test][1]) {
                                 fail = true;
                             }
                         }
                         if (!fail) {
                             workoutNumbers[e-1][0] = j;
                             workoutNumbers[e-1][1] = currentNumber;
+                            System.out.println(workoutData[j][currentNumber]);
                             workoutStrings.add(workoutData[j][currentNumber]);
                             e--;
+                        }
+                        else {
+                            System.out.println(workoutData[j][currentNumber]);
+                            System.out.println("Fail");                            
                         }
                     }
                     break;
@@ -304,7 +312,7 @@ public class mainFrame extends JFrame {
             }
         }
         System.out.println(workoutStrings);
-        
+      
     }
     
     public static void workoutAssemble(int i) {//make String
