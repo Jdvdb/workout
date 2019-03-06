@@ -27,7 +27,7 @@ public class mainFrame extends JFrame {
     private static WorkoutPanel workoutPanel;
     private static JFrame frame;
     private static JPanel back;
-    public static int timerTotal = 50;
+    public static int timerTotal = 1000;
     public static int numberOfExercises = 0;
     public static int currentIntensity = 0;
     public static boolean workoutStart = true;
@@ -49,7 +49,8 @@ public class mainFrame extends JFrame {
         
     }
     public static void workoutCountdownClock(int i,int e) {// e = current round
-        if (numberOfExercises == 0) {
+        if (numberOfExercises == 1) {
+            workoutPanel.currentExerciseLabel.setText(workoutStrings.get(numberOfExercises-1));
             workoutPanel.nextExerciseLabel.setText("Done!");
         }
         else {
