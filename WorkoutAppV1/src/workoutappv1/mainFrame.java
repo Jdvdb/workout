@@ -12,9 +12,14 @@ import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.JOptionPane;
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.io.*;
+import javax.sound.sampled.*;
+import java.net.URL;
+//import sun.audio.*; does not recognize and idk why
 /**
  *
  * @author jdvan
@@ -27,7 +32,7 @@ public class mainFrame extends JFrame {
     private static WorkoutPanel workoutPanel;
     private static JFrame frame;
     private static JPanel back;
-    public static int timerTotal = 1000;
+    public static int timerTotal = 100;
     public static int numberOfExercises = 0;
     public static int currentIntensity = 0;
     public static boolean workoutStart = true;
@@ -36,10 +41,10 @@ public class mainFrame extends JFrame {
     
     public static String[][] workoutData = {
             {"", "Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
-            {"", "Military press ", "Bicep curl", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
+            {"", "Military press with weight", "Bicep curl with weight", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
             {"", "Pull ups with TRX", "One leg squats with TRX", "Row with TRX", "Tricep Extensions with TRX", "Plank with TRX", "Side plank with TRX"},//TRX 6
             {"", "Russian twists with med ball", "Squat with med ball", "Crunches with med ball", "Tricep pushup on Med Ball", "Superman with med ball", "Kneeling wood chops with med ball", "Squat with halo and med ball", "Lunge and twist with med ball", "Single leg deadlift with med ball"},//Med Ball 9                        
-            {"", "Ab crunches on yoga ball", "Oblique lifts", "Back lift", "Seated balance", "Push-up with legs on Yoga Ball", "Plank with legs elevated on yoga ball"},//Ball 6
+            {"", "Ab crunches on yoga ball", "Oblique lifts with yoga ball", "Back lift with yoga ball", "Seated balance on yoga ball", "Push-up with legs on Yoga Ball", "Plank with legs elevated on yoga ball"},//Ball 6
         };//30 different exercises
     //make variables to assign intensity to
     
@@ -48,7 +53,47 @@ public class mainFrame extends JFrame {
 
         
     }
+    public static void workoutNoise() {
+    try
+    {
+        Clip clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(new File("src/workoutappv1/Audio/Blooper-sound-effect.wav")));
+        clip.start();
+    }
+    catch (Exception exc)
+    {
+        exc.printStackTrace(System.out);
+    }
+        
+    }
+    public static void breakNoise() {
+    try
+    {
+        Clip clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(new File("src/workoutappv1/Audio/Short-beep-noise.wav")));
+        clip.start();
+    }
+    catch (Exception exc)
+    {
+        exc.printStackTrace(System.out);
+    }
+        
+    }
+    public static void repFinishNoise() {
+    try
+    {
+        Clip clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(new File("src/workoutappv1/Audio/Wrong-alert-beep-sound.wav")));
+        clip.start();
+    }
+    catch (Exception exc)
+    {
+        exc.printStackTrace(System.out);
+    }
+        
+    }
     public static void workoutCountdownClock(int i,int e) {// e = current round
+    
         if (numberOfExercises == 1) {
             workoutPanel.currentExerciseLabel.setText(workoutStrings.get(numberOfExercises-1));
             workoutPanel.nextExerciseLabel.setText("Done!");
@@ -73,6 +118,7 @@ public class mainFrame extends JFrame {
                 else if (time == 1 && check) {
                     workoutPanel.timeExerciseLabel.setText("" + 1);                    
                     workoutCountdownBreak(intensity, exercises);
+                    breakNoise();
                     System.out.println("---------------------------------" + intensity);
                     check = false;
                 }
@@ -104,12 +150,14 @@ public class mainFrame extends JFrame {
                         workoutPanel.timeExerciseLabel.setText("" + 1);
                         System.out.println("------------Finish Rep--------------" + intensity);
                         workoutAssemble(intensity);
+                        repFinishNoise();
                         check = false;                
                     }
                     else if (check){
                         System.out.println("============================" + intensity);
                         check = false;
                         workoutCountdownClock(intensity, exercises);
+                        workoutNoise();
                     }
                 }
                 
@@ -515,6 +563,7 @@ public class mainFrame extends JFrame {
         premadeSelectPanel = new PremadeSelectPanel();
         randomSelectPanel = new RandomSelectPanel();
         workoutPanel = new WorkoutPanel();
+
         
         
 
@@ -571,12 +620,14 @@ public class mainFrame extends JFrame {
         randomSelectPanel.goLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent evt) {
+        if (randomSelectPanel.noWeightBox.isSelected() || randomSelectPanel.weightBox.isSelected() || randomSelectPanel.TRXBox.isSelected() || randomSelectPanel.medicineBallBox.isSelected() || randomSelectPanel.ballBox.isSelected()) {
             CardLayout cardLayout = (CardLayout) back.getLayout();
             cardLayout.show(back, "Workout Panel");
             numberOfExercises = randomSelectPanel.exerciseSlider.getValue();
             currentIntensity = randomSelectPanel.intensitySlider.getValue();
             workoutString(numberOfExercises);
             workoutAssemble(randomSelectPanel.intensitySlider.getValue());
+        }
         }
     });
     } 
