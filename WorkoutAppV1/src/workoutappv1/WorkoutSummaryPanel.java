@@ -5,6 +5,9 @@
  */
 package workoutappv1;
 
+import java.awt.Color;
+import java.awt.Font;
+
 /**
  *
  * @author jdvan
@@ -16,6 +19,8 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
      */
     public WorkoutSummaryPanel() {
         initComponents();
+        workoutSummaryTable.getTableHeader().setFont(new Font("Comic Sans MS", Font.ITALIC, 12));
+        workoutSummaryTable.getTableHeader().setBackground(new Color(255,153,153));
     }
 
     /**
@@ -27,19 +32,66 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        workoutSummaryTable = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(255, 153, 153));
+
+        jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 65)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Summary");
+
+        workoutSummaryTable.setBackground(new java.awt.Color(255, 153, 153));
+        workoutSummaryTable.setFont(new java.awt.Font("Comic Sans MS", 0, 15)); // NOI18N
+        workoutSummaryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Workout", "Number of Reps", "Time per Rep"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        workoutSummaryTable.setAutoscrolls(false);
+        workoutSummaryTable.setGridColor(new java.awt.Color(255, 153, 153));
+        workoutSummaryTable.setOpaque(false);
+        workoutSummaryTable.setSelectionBackground(new java.awt.Color(0, 0, 0));
+        workoutSummaryTable.setSelectionForeground(new java.awt.Color(255, 153, 153));
+        jScrollPane2.setViewportView(workoutSummaryTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JTable workoutSummaryTable;
     // End of variables declaration//GEN-END:variables
 }

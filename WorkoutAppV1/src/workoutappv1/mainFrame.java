@@ -33,7 +33,7 @@ public class mainFrame extends JFrame {
     private static WorkoutSummaryPanel workoutSummaryPanel;
     private static JFrame frame;
     private static JPanel back;
-    public int timerTotal = 100;
+    public int timerTotal = 10;
     public int numberOfExercises = 0;
     public int currentIntensity = 0;
     public boolean workoutStart = true;
@@ -137,6 +137,9 @@ public class mainFrame extends JFrame {
             whatWasIntensity = b;
             whatWasTotalTime = c;
             theExercises = d;
+        }
+        public void fillInSummary() {
+            //workoutSummaryPanel.summaryLabel.setText("<html>   Number of workouts:  " + howManyWorkouts + "Total time</html>");            
         }
         
     }
@@ -273,7 +276,7 @@ public class mainFrame extends JFrame {
                     currentIntensity = randomSelectPanel.intensitySlider.getValue();
                     workoutString(numberOfExercises);
                     workoutAssemble(randomSelectPanel.intensitySlider.getValue());
-                    check = false;
+                    check = false;           
                 }
                 
             }
@@ -566,8 +569,7 @@ public class mainFrame extends JFrame {
     }
     
     public void workoutAssemble(int i) {//make String
-        //System.out.println(i);
-        //i = intensity e = # of exercises
+        //i = intensity 
         /* Intensity works in sets of three
         easy = 45 x 3 = 135
         med = 60 x 4 = 240
@@ -587,6 +589,8 @@ public class mainFrame extends JFrame {
         if (workoutStart) {
             workoutTimeLeftClock(getTotalTime(i));
             workoutStart = false;
+            savedWorkout a = new savedWorkout(numberOfExercises, i, getTotalTime(i), workoutStrings);
+            //a.fillInSummary(i, i, i, workoutStrings);
         }
         
         if (numberOfExercises > 0) {
@@ -668,7 +672,6 @@ public class mainFrame extends JFrame {
         else {
             CardLayout cardLayout = (CardLayout) back.getLayout();
             cardLayout.show(back, "Workout Summary Panel");
-            savedWorkout a = new savedWorkout(1,2,3,workoutStrings);
         }
         
         
