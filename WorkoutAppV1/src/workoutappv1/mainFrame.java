@@ -30,9 +30,10 @@ public class mainFrame extends JFrame {
     private static PremadeSelectPanel premadeSelectPanel;
     private static RandomSelectPanel randomSelectPanel;
     private static WorkoutPanel workoutPanel;
+    private static WorkoutCountdownPanel workoutCountdownPanel;
     private static JFrame frame;
     private static JPanel back;
-    public static int timerTotal = 100;
+    public static int timerTotal = 1000;
     public static int numberOfExercises = 0;
     public static int currentIntensity = 0;
     public static boolean workoutStart = true;
@@ -166,18 +167,44 @@ public class mainFrame extends JFrame {
         });
         easyCountdownBreak.start();
     }
-    
+    public static void preWorkoutCountdownClock() {// e = current round
+        workoutPanel.currentExerciseLabel.setText("Break");
+        Timer easyCountdownBreak;
+        easyCountdownBreak = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
+            int time = 5;
+            boolean check = true;
+            public void actionPerformed(ActionEvent e) {
+
+                if (time > 0) {
+                    workoutCountdownPanel.fiveFourThreeTwoOne.setText("" + time);                    
+                    time--;
+                }
+                else if (check){
+                    CardLayout cardLayout = (CardLayout) back.getLayout();
+                    cardLayout.show(back, "Workout Panel");
+                    numberOfExercises = randomSelectPanel.exerciseSlider.getValue();
+                    currentIntensity = randomSelectPanel.intensitySlider.getValue();
+                    workoutString(numberOfExercises);
+                    workoutAssemble(randomSelectPanel.intensitySlider.getValue());
+                    check = false;
+                }
+                
+            }
+            
+        });
+        easyCountdownBreak.start();
+    }    
     
     public static void workoutTimeLeftClock(int i) {//i = difficulty e = # of exercises 
         Timer workoutTime = new Timer(timerTotal, new ActionListener() {
-            int time = i;            
+            int time = i;
             public void actionPerformed(ActionEvent e) {
                 if (time > 0) {
                     if (time % 60 >= 10) {
                         workoutPanel.timeWorkoutLabel.setText("" + time / 60 + ":" + time % 60);
                     }
                     else {
-                        workoutPanel.timeWorkoutLabel.setText("" + time / 60 + ":0" + time % 60);                        
+                        workoutPanel.timeWorkoutLabel.setText("" + time / 60 + ":0" + time % 60);
                     }
                     time--;                    
                 }
@@ -242,18 +269,20 @@ public class mainFrame extends JFrame {
             case 6:
                 timeCalc = 825;
                 while (e > 0) {
-                if (e == 1) {
+            switch (e) {
+                case 1:
                     timeCalc = timeCalc + 135;
                     e--;
-                }
-                else if (e == 2) {
+                    break;
+                case 2:
                     timeCalc = timeCalc + 240;
                     e--;
-                }
-                else {
+                    break;
+                default:
                     timeCalc = timeCalc + 450;
                     e--;
-                }
+                    break;
+            }
                 }
                      break;
             case 7: 
@@ -563,6 +592,7 @@ public class mainFrame extends JFrame {
         premadeSelectPanel = new PremadeSelectPanel();
         randomSelectPanel = new RandomSelectPanel();
         workoutPanel = new WorkoutPanel();
+        workoutCountdownPanel = new WorkoutCountdownPanel();
 
         
         
@@ -573,6 +603,7 @@ public class mainFrame extends JFrame {
         back.add(premadeSelectPanel, "Premade Select Panel");
         back.add(randomSelectPanel, "Random Select Panel");
         back.add(workoutPanel, "Workout Panel");
+        back.add(workoutCountdownPanel, "Workout Countdown Panel");
         
         //add back to frame
         frame.add(back);
@@ -622,11 +653,8 @@ public class mainFrame extends JFrame {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
         if (randomSelectPanel.noWeightBox.isSelected() || randomSelectPanel.weightBox.isSelected() || randomSelectPanel.TRXBox.isSelected() || randomSelectPanel.medicineBallBox.isSelected() || randomSelectPanel.ballBox.isSelected()) {
             CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Workout Panel");
-            numberOfExercises = randomSelectPanel.exerciseSlider.getValue();
-            currentIntensity = randomSelectPanel.intensitySlider.getValue();
-            workoutString(numberOfExercises);
-            workoutAssemble(randomSelectPanel.intensitySlider.getValue());
+            cardLayout.show(back, "Workout Countdown Panel");
+            preWorkoutCountdownClock();
         }
         }
     });
