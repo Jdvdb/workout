@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
@@ -31,16 +30,17 @@ public class mainFrame extends JFrame {
     private static RandomSelectPanel randomSelectPanel;
     private static WorkoutPanel workoutPanel;
     private static WorkoutCountdownPanel workoutCountdownPanel;
+    private static WorkoutSummaryPanel workoutSummaryPanel;
     private static JFrame frame;
     private static JPanel back;
-    public static int timerTotal = 1000;
-    public static int numberOfExercises = 0;
-    public static int currentIntensity = 0;
-    public static boolean workoutStart = true;
-    public static int totalTimeCounter;
-    public static LinkedList<String> workoutStrings = new LinkedList<String>();
+    public int timerTotal = 100;
+    public int numberOfExercises = 0;
+    public int currentIntensity = 0;
+    public boolean workoutStart = true;
+    public int totalTimeCounter;
+    public LinkedList<String> workoutStrings = new LinkedList<String>();
     
-    public static String[][] workoutData = {
+    public String[][] workoutData = {
             {"", "Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
             {"", "Military press with weight", "Bicep curl with weight", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
             {"", "Pull ups with TRX", "One leg squats with TRX", "Row with TRX", "Tricep Extensions with TRX", "Plank with TRX", "Side plank with TRX"},//TRX 6
@@ -51,10 +51,97 @@ public class mainFrame extends JFrame {
     
     
     public mainFrame() {
+        //create all frames
+        frame = new JFrame("Workout");
+        back = new JPanel(new CardLayout());
+        frame.setLayout(new BorderLayout());
+        selectionPanel = new SelectionPanel();
+        premadeSelectPanel = new PremadeSelectPanel();
+        randomSelectPanel = new RandomSelectPanel();
+        workoutPanel = new WorkoutPanel();
+        workoutCountdownPanel = new WorkoutCountdownPanel();
+        workoutSummaryPanel = new WorkoutSummaryPanel();
 
+        //add JPanel's to back
+        back.add(selectionPanel, "Selection Panel");
+        back.add(premadeSelectPanel, "Premade Select Panel");
+        back.add(randomSelectPanel, "Random Select Panel");
+        back.add(workoutPanel, "Workout Panel");
+        back.add(workoutCountdownPanel, "Workout Countdown Panel");
+        back.add(workoutSummaryPanel, "Workout Summary Panel");
+        
+        //add back to frame
+        frame.add(back);
+        
+        //initialize frame
+        frame.setSize(500,500);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(500, 500));
+        frame.setVisible(true);
+        
+        //button from SelectionPanel to Random Select Panel
+        selectionPanel.RandomLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            CardLayout cardLayout = (CardLayout) back.getLayout();
+            cardLayout.show(back, "Random Select Panel");
+            
+        }
+    });
+        //button from SelectionPanel to Premade Select Panel
+        selectionPanel.PremadeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            CardLayout cardLayout = (CardLayout) back.getLayout();
+            cardLayout.show(back, "Premade Select Panel");            
+        }
+    });
+        //button from Random Select Panel to SelectionPanel
+        randomSelectPanel.backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            CardLayout cardLayout = (CardLayout) back.getLayout();
+            cardLayout.show(back, "Selection Panel");            
+        }
+    }); 
+        //button from Premade Select Panel to SelectionPanel
+        premadeSelectPanel.backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            CardLayout cardLayout = (CardLayout) back.getLayout();
+            cardLayout.show(back, "Selection Panel");            
+        }
+    });
+        randomSelectPanel.goLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+        if (randomSelectPanel.noWeightBox.isSelected() || randomSelectPanel.weightBox.isSelected() || randomSelectPanel.TRXBox.isSelected() || randomSelectPanel.medicineBallBox.isSelected() || randomSelectPanel.ballBox.isSelected()) {
+            CardLayout cardLayout = (CardLayout) back.getLayout();
+            cardLayout.show(back, "Workout Countdown Panel");
+            preWorkoutCountdownClock();
+        }
+        }
+    });
         
     }
-    public static void workoutNoise() {
+    
+    public class savedWorkout {
+        int howManyWorkouts;
+        int whatWasIntensity;
+        int whatWasTotalTime;
+        LinkedList<String> theExercises = new LinkedList<>();
+        
+        public savedWorkout(int a, int b, int c, LinkedList<String> d) {
+            howManyWorkouts = a;
+            whatWasIntensity = b;
+            whatWasTotalTime = c;
+            theExercises = d;
+        }
+        
+    }
+    
+    public void workoutNoise() {
     try
     {
         Clip clip = AudioSystem.getClip();
@@ -67,7 +154,7 @@ public class mainFrame extends JFrame {
     }
         
     }
-    public static void breakNoise() {
+    public void breakNoise() {
     try
     {
         Clip clip = AudioSystem.getClip();
@@ -80,7 +167,7 @@ public class mainFrame extends JFrame {
     }
         
     }
-    public static void repFinishNoise() {
+    public void repFinishNoise() {
     try
     {
         Clip clip = AudioSystem.getClip();
@@ -93,7 +180,7 @@ public class mainFrame extends JFrame {
     }
         
     }
-    public static void workoutCountdownClock(int i,int e) {// e = current round
+    public void workoutCountdownClock(int i,int e) {// e = current round
     
         if (numberOfExercises == 1) {
             workoutPanel.currentExerciseLabel.setText(workoutStrings.get(numberOfExercises-1));
@@ -129,7 +216,7 @@ public class mainFrame extends JFrame {
         });
         easyCountdownTimer.start();
     }
-    public static void workoutCountdownBreak(int i,int e) {// e = current round
+    public void workoutCountdownBreak(int i,int e) {// e = current round
         workoutPanel.currentExerciseLabel.setText("Break");
         Timer easyCountdownBreak;
         easyCountdownBreak = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
@@ -167,9 +254,9 @@ public class mainFrame extends JFrame {
         });
         easyCountdownBreak.start();
     }
-    public static void preWorkoutCountdownClock() {// e = current round
+    public void preWorkoutCountdownClock() {// e = current round
         workoutPanel.currentExerciseLabel.setText("Break");
-        Timer easyCountdownBreak;
+        Timer easyCountdownBreak;        
         easyCountdownBreak = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
             int time = 5;
             boolean check = true;
@@ -195,7 +282,7 @@ public class mainFrame extends JFrame {
         easyCountdownBreak.start();
     }    
     
-    public static void workoutTimeLeftClock(int i) {//i = difficulty e = # of exercises 
+    public void workoutTimeLeftClock(int i) {//i = difficulty e = # of exercises 
         Timer workoutTime = new Timer(timerTotal, new ActionListener() {
             int time = i;
             public void actionPerformed(ActionEvent e) {
@@ -217,7 +304,7 @@ public class mainFrame extends JFrame {
         workoutTime.start();
     }
     
-    public static int getTotalTime(int i) {
+    public int getTotalTime(int i) {
         int timeCalc = 0;
         int e = numberOfExercises - 3;
         switch (i) {//check medulo of rounds
@@ -335,13 +422,13 @@ public class mainFrame extends JFrame {
         return timeCalc;
     }
     
-    public static int randomWorkoutNumber() {//0-4
+    public int randomWorkoutNumber() {//0-4
         double i = Math.random()*5.0;
         int answer = (int) i;
         return answer;
     }
     
-    public static void workoutString(int e) {//[category][workout] also make case for none selected.
+    public void workoutString(int e) {//[category][workout] also make case for none selected.
         boolean noWeights = randomSelectPanel.noWeightBox.isSelected();
         boolean weights = randomSelectPanel.weightBox.isSelected();
         boolean trx = randomSelectPanel.TRXBox.isSelected();
@@ -478,7 +565,7 @@ public class mainFrame extends JFrame {
       
     }
     
-    public static void workoutAssemble(int i) {//make String
+    public void workoutAssemble(int i) {//make String
         //System.out.println(i);
         //i = intensity e = # of exercises
         /* Intensity works in sets of three
@@ -578,86 +665,18 @@ public class mainFrame extends JFrame {
                      break;
         }
         }
+        else {
+            CardLayout cardLayout = (CardLayout) back.getLayout();
+            cardLayout.show(back, "Workout Summary Panel");
+            savedWorkout a = new savedWorkout(1,2,3,workoutStrings);
+        }
         
         
         
     }
     
     public static void main(String[] args) {
-        //create all frames
-        frame = new JFrame("Workout");
-        back = new JPanel(new CardLayout());
-        frame.setLayout(new BorderLayout());
-        selectionPanel = new SelectionPanel();
-        premadeSelectPanel = new PremadeSelectPanel();
-        randomSelectPanel = new RandomSelectPanel();
-        workoutPanel = new WorkoutPanel();
-        workoutCountdownPanel = new WorkoutCountdownPanel();
-
-        
-        
-
-        
-        //add JPanel's to back
-        back.add(selectionPanel, "Selection Panel");
-        back.add(premadeSelectPanel, "Premade Select Panel");
-        back.add(randomSelectPanel, "Random Select Panel");
-        back.add(workoutPanel, "Workout Panel");
-        back.add(workoutCountdownPanel, "Workout Countdown Panel");
-        
-        //add back to frame
-        frame.add(back);
-        
-        //initialize frame
-        frame.setSize(500,500);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(500, 500));
-        frame.setVisible(true);
-        
-        //button from SelectionPanel to Random Select Panel
-        selectionPanel.RandomLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Random Select Panel");
-            
-        }
-    });
-        //button from SelectionPanel to Premade Select Panel
-        selectionPanel.PremadeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Premade Select Panel");            
-        }
-    });
-        //button from Random Select Panel to SelectionPanel
-        randomSelectPanel.backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Selection Panel");            
-        }
-    }); 
-        //button from Premade Select Panel to SelectionPanel
-        premadeSelectPanel.backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Selection Panel");            
-        }
-    });
-        randomSelectPanel.goLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-        if (randomSelectPanel.noWeightBox.isSelected() || randomSelectPanel.weightBox.isSelected() || randomSelectPanel.TRXBox.isSelected() || randomSelectPanel.medicineBallBox.isSelected() || randomSelectPanel.ballBox.isSelected()) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Workout Countdown Panel");
-            preWorkoutCountdownClock();
-        }
-        }
-    });
-    } 
+        mainFrame app = new mainFrame();
+    }
     
 }
