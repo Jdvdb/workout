@@ -39,6 +39,8 @@ public class mainFrame extends JFrame {
     public boolean workoutStart = true;
     public int totalTimeCounter;
     public LinkedList<String> workoutStrings = new LinkedList<String>();
+    public LinkedList<Integer> intensityTester = new LinkedList<Integer>();
+    public savedWorkout a = new savedWorkout();
     
     public String[][] workoutData = {
             {"", "Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
@@ -128,18 +130,34 @@ public class mainFrame extends JFrame {
     
     public class savedWorkout {
         int howManyWorkouts;
+        LinkedList<Integer> diffIntensity;
         int whatWasIntensity;
         int whatWasTotalTime;
         LinkedList<String> theExercises = new LinkedList<>();
         
-        public savedWorkout(int a, int b, int c, LinkedList<String> d) {
-            howManyWorkouts = a;
-            whatWasIntensity = b;
-            whatWasTotalTime = c;
-            theExercises = d;
+        public savedWorkout() {
+        }
+        public void getHowManyWorkouts() {
+            howManyWorkouts = numberOfExercises;
         }
         public void fillInSummary() {
-            //workoutSummaryPanel.summaryLabel.setText("<html>   Number of workouts:  " + howManyWorkouts + "Total time</html>");            
+            diffIntensity = intensityTester;
+            theExercises = workoutStrings;
+            System.out.println(theExercises);
+            
+            for (int i = howManyWorkouts; i > 0; i--) {
+                workoutSummaryPanel.workoutSummaryTable.setValueAt(theExercises.get(i - 1), (howManyWorkouts - i) + 1, 0);
+                workoutSummaryPanel.workoutSummaryTable.setValueAt(diffIntensity.get(howManyWorkouts - i), (howManyWorkouts - i) + 1, 1);
+                if (diffIntensity.get(i-1) == 3) {
+                    workoutSummaryPanel.workoutSummaryTable.setValueAt("30 Seconds", (howManyWorkouts - i) + 1, 2);
+                }
+                else if (diffIntensity.get(i-1) == 4) {
+                    workoutSummaryPanel.workoutSummaryTable.setValueAt("45 Seconds", (howManyWorkouts - i) + 1, 2);                    
+                }
+                else {
+                    workoutSummaryPanel.workoutSummaryTable.setValueAt("1 minute", (howManyWorkouts - i) + 1, 2);                    
+                }                
+            }
         }
         
     }
@@ -589,80 +607,96 @@ public class mainFrame extends JFrame {
         if (workoutStart) {
             workoutTimeLeftClock(getTotalTime(i));
             workoutStart = false;
-            savedWorkout a = new savedWorkout(numberOfExercises, i, getTotalTime(i), workoutStrings);
-            //a.fillInSummary(i, i, i, workoutStrings);
+            a.getHowManyWorkouts();
         }
         
         if (numberOfExercises > 0) {
-            //.println(i);
    switch (currentIntensity) {//check medulo of rounds
-            case 1:  
+            case 1:
+                intensityTester.add(3);
                 workoutCountdownClock(1, 3);
                             //System.out.println(i + "lvl 1");
                      break;
             case 2:
                 if (numberOfExercises % 3 > 0) {
-                workoutCountdownClock(1,3);
+                    intensityTester.add(3);
+                    workoutCountdownClock(1,3);
                 }
                 else {
-                workoutCountdownClock(2,4);
+                    intensityTester.add(4);
+                    workoutCountdownClock(2,4);
                 }
                      break;
             case 3: 
                 if (numberOfExercises % 3 > 1) {
+                    intensityTester.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else {
+                    intensityTester.add(4);
                     workoutCountdownClock(2,4);
                 }                
                      break;
             case 4:  
                 if (numberOfExercises % 3 > 0) {
+                    intensityTester.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else {
+                    intensityTester.add(6);
                     workoutCountdownClock(3,6);
                 }
                      break;
-            case 5: 
+            case 5:
+                intensityTester.add(4);
                 workoutCountdownClock(2,4);
                      break;
             case 6:  
                 if (numberOfExercises % 3 > 1) {
+                    intensityTester.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else if (numberOfExercises % 3 == 0) {
+                    intensityTester.add(6);
                     workoutCountdownClock(3,6);
                 }
                 else {
+                    intensityTester.add(4);
                     workoutCountdownClock(2,4);
                 }
                      break;
             case 7:  
                 if (numberOfExercises % 3 > 0) {
+                    intensityTester.add(4);
                     workoutCountdownClock(2,4);
                 }
                 else {
+                    intensityTester.add(6);
                     workoutCountdownClock(3,6);
                 }
                      break;
             case 8: 
                 if (numberOfExercises % 3 > 1) {
+                    intensityTester.add(3);
                     workoutCountdownClock(1,3); 
                 }
                 else {
+                    intensityTester.add(6);
                     workoutCountdownClock(3,6);
                 }
                      break;
             case 9: 
                 if (numberOfExercises % 3 > 1) {
+                    intensityTester.add(4);
                     workoutCountdownClock(2,4);
                 }
                 else {
+                    intensityTester.add(6);
                     workoutCountdownClock(3,6); 
                 }                
                      break;
             case 10:
+                intensityTester.add(6);
                 workoutCountdownClock(3,6);             
                      break;
             default:
@@ -672,6 +706,7 @@ public class mainFrame extends JFrame {
         else {
             CardLayout cardLayout = (CardLayout) back.getLayout();
             cardLayout.show(back, "Workout Summary Panel");
+            a.fillInSummary();
         }
         
         

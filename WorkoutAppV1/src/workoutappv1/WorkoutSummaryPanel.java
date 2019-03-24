@@ -19,8 +19,7 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
      */
     public WorkoutSummaryPanel() {
         initComponents();
-        workoutSummaryTable.getTableHeader().setFont(new Font("Comic Sans MS", Font.ITALIC, 12));
-        workoutSummaryTable.getTableHeader().setBackground(new Color(255,153,153));
+        workoutSummaryTable.setTableHeader(null);
     }
 
     /**
@@ -46,6 +45,7 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
         workoutSummaryTable.setFont(new java.awt.Font("Comic Sans MS", 0, 15)); // NOI18N
         workoutSummaryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {"Workout", "Number of Reps", "Time per Rep"},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null},
@@ -65,6 +65,7 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        workoutSummaryTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         workoutSummaryTable.setAutoscrolls(false);
         workoutSummaryTable.setGridColor(new java.awt.Color(255, 153, 153));
         workoutSummaryTable.setOpaque(false);
@@ -76,7 +77,7 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -84,7 +85,8 @@ public class WorkoutSummaryPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                .addGap(48, 48, 48))
         );
     }// </editor-fold>//GEN-END:initComponents
 
