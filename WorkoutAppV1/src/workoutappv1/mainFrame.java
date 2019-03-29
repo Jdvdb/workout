@@ -33,7 +33,7 @@ public class mainFrame extends JFrame {
     private static WorkoutSummaryPanel workoutSummaryPanel;
     private static JFrame frame;
     private static JPanel back;
-    public int timerTotal = 10;
+    public int timerTotal = 1000;
     public int numberOfExercises = 0;
     public int currentIntensity = 0;
     public boolean workoutStart = true;
@@ -122,6 +122,9 @@ public class mainFrame extends JFrame {
             CardLayout cardLayout = (CardLayout) back.getLayout();
             cardLayout.show(back, "Workout Countdown Panel");
             preWorkoutCountdownClock();
+        }
+        else {
+            JOptionPane.showMessageDialog(new JFrame(), "Please select a workout");
         }
         }
     });
@@ -279,7 +282,7 @@ public class mainFrame extends JFrame {
         workoutPanel.currentExerciseLabel.setText("Break");
         Timer easyCountdownBreak;        
         easyCountdownBreak = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
-            int time = 5;
+            int time = 4;
             boolean check = true;
             public void actionPerformed(ActionEvent e) {
 

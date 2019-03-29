@@ -13,7 +13,128 @@ public class RandomSelectPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form RandomSelectPanel
+     * 
      */
+        public int getTotalTime(int i, int e) {
+        int timeCalc = 0;
+        switch (i) {//check medulo of rounds
+            case 1:
+                System.out.println(i + " " + e);
+                timeCalc = e * 135;
+                    break;
+            case 2:
+                while (e > 0) {
+                    System.out.println(i + " " + e);
+                    if (e % 3 == 1 || e % 3 == 2) {
+                        timeCalc = timeCalc + 135;
+                        e--;
+                    }
+                    else if (e % 3 == 0) {
+                        timeCalc = timeCalc + 240;
+                        e--;
+                    }
+                }
+                    break;
+            case 3:
+                while (e > 0) {
+                    System.out.println(i + " " + e);
+                    if (e % 3 == 1) {
+                        timeCalc = timeCalc + 135;
+                        e--;
+                    }
+                    else if (e % 3 == 0 || e % 3  == 2) {
+                        timeCalc = timeCalc + 240;
+                        e--;
+                    }
+                }                
+                    break;
+            case 4:
+                while (e > 0) {
+                    System.out.println(i + " " + e);
+                    if (e % 3 == 1 || e % 3 == 2) {
+                        timeCalc = timeCalc + 135;
+                        e--;
+                    }
+                    else if (e % 3 == 0) {
+                        timeCalc = timeCalc + 450;
+                        e--;
+                    }
+                }
+                    break;
+            case 5:  
+                timeCalc = e * 240;
+                System.out.println(i + " " + e);
+                    break;
+            case 6:
+                while (e > 0) {
+                    int remainder = e % 3;
+                    System.out.println(i + " " + e);
+                    switch (remainder) {
+                    case 1:
+                        timeCalc = timeCalc + 135;
+                        e--;
+                        break;
+                    case 2:
+                        timeCalc = timeCalc + 240;
+                        e--;
+                        break;
+                    default:
+                        timeCalc = timeCalc + 450;
+                        e--;
+                        break;
+                    }
+                }
+                    break;
+            case 7: 
+                while (e > 0) {
+                    System.out.println(i + " " + e);
+                    if (e % 3 == 1 || e % 3 == 2) {
+                        timeCalc = timeCalc + 240;
+                        e--;
+                    }
+                    else if (e % 3 == 0) {
+                        timeCalc = timeCalc + 450;
+                        e--;
+                    }
+                }                
+                    break;
+            case 8:  
+                while (e > 0) {
+                    System.out.println(i + " " + e);
+                    if (e % 3 == 1) {
+                        timeCalc = timeCalc + 135;
+                        e--;
+                    }
+                    else if (e % 3 == 0 || e % 3 == 2) {
+                        timeCalc = timeCalc + 450;
+                        e--;
+                    }
+                }                
+                    break;
+            case 9:
+                while (e > 0) {
+                    System.out.println(i + " " + e);
+                    if (e % 3 == 1) {
+                        timeCalc = timeCalc + 240;
+                        e--;
+                    }
+                    else if (e % 3 == 0 || e % 3 == 2) {
+                        timeCalc = timeCalc + 450;
+                        e--;
+                    }
+                }                 
+                    break;
+            case 10:
+                timeCalc = e * 450;
+                System.out.println(i + " " + e);
+                    break;
+            default:
+                    break;
+        }
+        
+        
+        return timeCalc;
+    }
     public RandomSelectPanel() {
         initComponents();
     }
@@ -41,9 +162,15 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         exerciseSlider = new javax.swing.JSlider();
         exerciseValue = new javax.swing.JLabel();
+        totalTimeLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 153, 153));
         setPreferredSize(new java.awt.Dimension(500, 500));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         noWeightBox.setText("No Weight");
         noWeightBox.setMaximumSize(new java.awt.Dimension(85, 50));
@@ -84,6 +211,11 @@ public class RandomSelectPanel extends javax.swing.JPanel {
                 intensitySliderStateChanged(evt);
             }
         });
+        intensitySlider.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                intensitySliderMouseExited(evt);
+            }
+        });
 
         sliderValue.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
         sliderValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -110,11 +242,6 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         ballBox.setMaximumSize(new java.awt.Dimension(85, 50));
         ballBox.setMinimumSize(new java.awt.Dimension(85, 35));
         ballBox.setPreferredSize(new java.awt.Dimension(85, 50));
-        ballBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ballBoxActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
         jLabel2.setText("Intensity");
@@ -137,6 +264,9 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         exerciseValue.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
         exerciseValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exerciseValue.setText("3");
+
+        totalTimeLabel.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        totalTimeLabel.setText("6:45");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -177,7 +307,9 @@ public class RandomSelectPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(41, 41, 41)
                         .addComponent(backLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(330, 330, 330)
+                        .addGap(82, 82, 82)
+                        .addComponent(totalTimeLabel)
+                        .addGap(73, 73, 73)
                         .addComponent(goLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(54, 54, 54))
         );
@@ -208,7 +340,7 @@ public class RandomSelectPanel extends javax.swing.JPanel {
                                         .addComponent(exerciseValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(46, 46, 46))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 21, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(noWeightBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(weightBox, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -222,11 +354,13 @@ public class RandomSelectPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(goLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
+                        .addComponent(goLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(backLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(121, 121, 121))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(backLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(totalTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(40, 40, 40))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -236,19 +370,41 @@ public class RandomSelectPanel extends javax.swing.JPanel {
 
     private void intensitySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_intensitySliderStateChanged
         sliderValue.setText(Integer.toString(intensitySlider.getValue()));
+        int in = intensitySlider.getValue();
+        int ex = exerciseSlider.getValue();
+        System.out.println(in + " " + ex);
+        if ((getTotalTime(in, ex) % 60) < 10) {
+            totalTimeLabel.setText("Time: " + getTotalTime(in, ex) / 60 + ":" + getTotalTime(in, ex) % 60 + "0");
+        }   
+        else {
+            totalTimeLabel.setText("Time: " + getTotalTime(in, ex) / 60 + ":" + getTotalTime(in, ex) % 60);
+        }
     }//GEN-LAST:event_intensitySliderStateChanged
 
     private void exerciseSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_exerciseSliderStateChanged
         exerciseValue.setText(Integer.toString(exerciseSlider.getValue()));
+        int in = intensitySlider.getValue();
+        int ex = exerciseSlider.getValue();
+        System.out.println(in + " " + ex);
+        if ((getTotalTime(in, ex) % 60) < 10) {
+            totalTimeLabel.setText("Time: " + getTotalTime(in, ex) / 60 + ":" + getTotalTime(in, ex) % 60 + "0");
+        }   
+        else {
+            totalTimeLabel.setText("Time: " + getTotalTime(in, ex) / 60 + ":" + getTotalTime(in, ex) % 60);
+        }
     }//GEN-LAST:event_exerciseSliderStateChanged
-
-    private void ballBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ballBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ballBoxActionPerformed
 
     private void weightBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_weightBoxActionPerformed
+
+    private void intensitySliderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intensitySliderMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_intensitySliderMouseExited
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -265,6 +421,7 @@ public class RandomSelectPanel extends javax.swing.JPanel {
     public javax.swing.JCheckBox medicineBallBox;
     public javax.swing.JCheckBox noWeightBox;
     public javax.swing.JLabel sliderValue;
+    public javax.swing.JLabel totalTimeLabel;
     public javax.swing.JCheckBox weightBox;
     // End of variables declaration//GEN-END:variables
 }
