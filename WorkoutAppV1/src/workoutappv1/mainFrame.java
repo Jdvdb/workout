@@ -13,11 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
 import java.awt.event.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.io.*;
 import javax.sound.sampled.*;
-import java.net.URL;
 //import sun.audio.*; does not recognize and idk why
 /**
  *
@@ -25,8 +23,7 @@ import java.net.URL;
  */
 public class mainFrame extends JFrame {
     
-    private static SelectionPanel selectionPanel;
-    private static PremadeSelectPanel premadeSelectPanel;
+    //Instantiating all of the different global variables and objects that will need to be accessed by the entire program.
     private static RandomSelectPanel randomSelectPanel;
     private static WorkoutPanel workoutPanel;
     private static WorkoutCountdownPanel workoutCountdownPanel;
@@ -41,7 +38,7 @@ public class mainFrame extends JFrame {
     public LinkedList<String> workoutStrings = new LinkedList<String>();
     public LinkedList<Integer> intensityTester = new LinkedList<Integer>();
     public savedWorkout a = new savedWorkout();
-    
+    //This is where to change workouts. Order from top to bottom is: No weight, No Equipment, TRX, Medicine Ball, Yoga Ball
     public String[][] workoutData = {
             {"", "Pushups", "Plank", "Lunges", "Mountain climbers", "Jumping jacks", "Squats", "Burpees", "Spider Pushups"},//no weight 8
             {"", "Military press with weight", "Bicep curl with weight", "Deadlifts", "Lunge with weight", "One arm swing with weight", "Cross body hammer curl"},//Weight 6
@@ -51,22 +48,18 @@ public class mainFrame extends JFrame {
         };//30 different exercises
     //make variables to assign intensity to
     
-    
+    //constructor for mainFrame class
     public mainFrame() {
-        //create all frames
+        //Initializing all of the global variables and objects
         frame = new JFrame("Workout");
         back = new JPanel(new CardLayout());
         frame.setLayout(new BorderLayout());
-        selectionPanel = new SelectionPanel();
-        premadeSelectPanel = new PremadeSelectPanel();
         randomSelectPanel = new RandomSelectPanel();
         workoutPanel = new WorkoutPanel();
         workoutCountdownPanel = new WorkoutCountdownPanel();
         workoutSummaryPanel = new WorkoutSummaryPanel();
 
-        //add JPanel's to back
-        back.add(selectionPanel, "Selection Panel");
-        back.add(premadeSelectPanel, "Premade Select Panel");
+        //add JPanel's to 'back' frame
         back.add(randomSelectPanel, "Random Select Panel");
         back.add(workoutPanel, "Workout Panel");
         back.add(workoutCountdownPanel, "Workout Countdown Panel");
@@ -82,39 +75,8 @@ public class mainFrame extends JFrame {
         frame.setMinimumSize(new Dimension(500, 500));
         frame.setVisible(true);
         
-        //button from SelectionPanel to Random Select Panel
-        selectionPanel.RandomLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Random Select Panel");
-            
-        }
-    });
-        //button from SelectionPanel to Premade Select Panel
-        selectionPanel.PremadeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Premade Select Panel");            
-        }
-    });
-        //button from Random Select Panel to SelectionPanel
-        randomSelectPanel.backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Selection Panel");            
-        }
-    }); 
-        //button from Premade Select Panel to SelectionPanel
-        premadeSelectPanel.backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            CardLayout cardLayout = (CardLayout) back.getLayout();
-            cardLayout.show(back, "Selection Panel");            
-        }
-    });
+ 
+
         randomSelectPanel.goLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent evt) {
