@@ -15,6 +15,7 @@ public class RandomSelectPanel extends javax.swing.JPanel {
      * Creates new form RandomSelectPanel
      * 
      */
+        //Very similar to the method within the main class
         public int getTotalTime(int i, int e) {
         int timeCalc = 0;
         switch (i) {//check medulo of rounds
@@ -136,6 +137,7 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         return timeCalc;
     }
     public RandomSelectPanel() {
+        //Runs the code created by the design window
         initComponents();
     }
 
@@ -166,41 +168,21 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 153, 153));
         setMinimumSize(new java.awt.Dimension(200, 200));
         setPreferredSize(new java.awt.Dimension(500, 500));
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
-            }
-        });
 
         noWeightBox.setText("No Equipment");
         noWeightBox.setMaximumSize(new java.awt.Dimension(85, 50));
         noWeightBox.setMinimumSize(new java.awt.Dimension(85, 35));
         noWeightBox.setPreferredSize(new java.awt.Dimension(85, 50));
-        noWeightBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noWeightBoxActionPerformed(evt);
-            }
-        });
 
         weightBox.setText("Weight");
         weightBox.setMaximumSize(new java.awt.Dimension(85, 50));
         weightBox.setMinimumSize(new java.awt.Dimension(85, 35));
         weightBox.setPreferredSize(new java.awt.Dimension(85, 50));
-        weightBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                weightBoxActionPerformed(evt);
-            }
-        });
 
         TRXBox.setText("TRX");
         TRXBox.setMaximumSize(new java.awt.Dimension(85, 50));
         TRXBox.setMinimumSize(new java.awt.Dimension(85, 35));
         TRXBox.setPreferredSize(new java.awt.Dimension(85, 50));
-        TRXBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TRXBoxActionPerformed(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -214,11 +196,6 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         intensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 intensitySliderStateChanged(evt);
-            }
-        });
-        intensitySlider.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                intensitySliderMouseExited(evt);
             }
         });
 
@@ -268,7 +245,7 @@ public class RandomSelectPanel extends javax.swing.JPanel {
 
         totalTimeLabel.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
         totalTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        totalTimeLabel.setText("Total Time: 6:45");
+        totalTimeLabel.setText("Time: 6:45");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -343,12 +320,11 @@ public class RandomSelectPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TRXBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TRXBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TRXBoxActionPerformed
-
     private void intensitySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_intensitySliderStateChanged
+        //First set the value of the JLabel beside the intensity slider
         sliderValue.setText(Integer.toString(intensitySlider.getValue()));
+        
+        //Update the time of workout displayed at the bottom of the display
         int in = intensitySlider.getValue();
         int ex = exerciseSlider.getValue();
         System.out.println(in + " " + ex);
@@ -361,7 +337,10 @@ public class RandomSelectPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_intensitySliderStateChanged
 
     private void exerciseSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_exerciseSliderStateChanged
+        //First set the value of the JLabel beside the exercise slider
         exerciseValue.setText(Integer.toString(exerciseSlider.getValue()));
+        
+        //Update the time of workout displayed at the bottom of the display
         int in = intensitySlider.getValue();
         int ex = exerciseSlider.getValue();
         System.out.println(in + " " + ex);
@@ -372,22 +351,6 @@ public class RandomSelectPanel extends javax.swing.JPanel {
             totalTimeLabel.setText("Time: " + getTotalTime(in, ex) / 60 + ":" + getTotalTime(in, ex) % 60);
         }
     }//GEN-LAST:event_exerciseSliderStateChanged
-
-    private void weightBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_weightBoxActionPerformed
-
-    private void intensitySliderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intensitySliderMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_intensitySliderMouseExited
-
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-
-    }//GEN-LAST:event_formMouseClicked
-
-    private void noWeightBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noWeightBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_noWeightBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

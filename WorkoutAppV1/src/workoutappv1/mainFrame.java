@@ -30,7 +30,7 @@ public class mainFrame extends JFrame {
     private static WorkoutSummaryPanel workoutSummaryPanel;
     private static JFrame frame;
     private static JPanel back;
-    public int timerTotal = 1000;
+    public int timerTotal = 10;
     public int numberOfExercises = 0;
     public int currentIntensity = 0;
     public boolean workoutStart = true;
@@ -69,7 +69,7 @@ public class mainFrame extends JFrame {
         frame.add(back);
         
         //initialize frame
-        frame.setSize(500,500);
+        frame.setSize(600,600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(500, 500));
@@ -94,39 +94,53 @@ public class mainFrame extends JFrame {
     }
     
     public class savedWorkout {
+        /*This class will turn the information from the workout into an object
+        that contains an int for how many workouts are there and two linked lists.
+        One that stores what the intensity of each exercise is (or how many reps)
+        and another that stores the string of each exercise.
+        */
         int howManyWorkouts;
         LinkedList<Integer> diffIntensity;
-        int whatWasIntensity;
-        int whatWasTotalTime;
         LinkedList<String> theExercises = new LinkedList<>();
         
+        //nothing needs to be done in the constructor.
         public savedWorkout() {
         }
+        
+        //saves the number of exercises into the object.        
         public void getHowManyWorkouts() {
             howManyWorkouts = numberOfExercises;
         }
+        
+        //this will fill in the Workout Summary Panel created at the beginning.
         public void fillInSummary() {
             diffIntensity = intensityTester;
             theExercises = workoutStrings;
-            System.out.println(theExercises);
+            System.out.println(diffIntensity);
             
+            //This loop will fill the table row by row
             for (int i = howManyWorkouts; i > 0; i--) {
+                //This starts at the end of the exercises linked list (i.e the first workout) and works down the first column
                 workoutSummaryPanel.workoutSummaryTable.setValueAt(theExercises.get(i - 1), (howManyWorkouts - i) + 1, 0);
+                
+                //This starts at the end of the intensity linked list and works down the second and third column.
                 workoutSummaryPanel.workoutSummaryTable.setValueAt(diffIntensity.get(howManyWorkouts - i), (howManyWorkouts - i) + 1, 1);
+                //these if statements determine what wording goes into the third panel based on the intensity.
                 if (diffIntensity.get(i-1) == 3) {
-                    workoutSummaryPanel.workoutSummaryTable.setValueAt("30 Seconds", (howManyWorkouts - i) + 1, 2);
+                    workoutSummaryPanel.workoutSummaryTable.setValueAt("30 Seconds", i, 2);
                 }
                 else if (diffIntensity.get(i-1) == 4) {
-                    workoutSummaryPanel.workoutSummaryTable.setValueAt("45 Seconds", (howManyWorkouts - i) + 1, 2);                    
+                    workoutSummaryPanel.workoutSummaryTable.setValueAt("45 Seconds", i, 2);                    
                 }
                 else {
-                    workoutSummaryPanel.workoutSummaryTable.setValueAt("1 minute", (howManyWorkouts - i) + 1, 2);                    
+                    workoutSummaryPanel.workoutSummaryTable.setValueAt("1 minute", i, 2);                    
                 }                
             }
         }
         
     }
     
+    //These next three methods are used to get the sounds from the source packages and play them
     public void workoutNoise() {
     try
     {
@@ -166,8 +180,11 @@ public class mainFrame extends JFrame {
     }
         
     }
-    public void workoutCountdownClock(int i,int e) {// e = current round
     
+    //This method starts the countdown for while a workout is being done.
+    public void workoutCountdownClock(int i,int e) {
+    
+        //first it makes sure there is more than one workout left.
         if (numberOfExercises == 1) {
             workoutPanel.currentExerciseLabel.setText(workoutStrings.get(numberOfExercises-1));
             workoutPanel.nextExerciseLabel.setText("Done!");
@@ -177,12 +194,16 @@ public class mainFrame extends JFrame {
             workoutPanel.nextExerciseLabel.setText(workoutStrings.get(numberOfExercises-2));
         }
         
+        //create a timer object but do not run it.
         Timer easyCountdownTimer;
-        easyCountdownTimer = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
+        easyCountdownTimer = new Timer(timerTotal, new ActionListener() {
+            //first all of the variables this method will need are shown.
             int time = 15 + (i * 15);
             int intensity = i;
             int exercises = e;
             boolean check = true;
+            
+            //this is run every second to change the time shown on the JLabel and, at the end, start the break timer.
             public void actionPerformed(ActionEvent e) {
                 if (time > 1) {
                     workoutPanel.timeExerciseLabel.setText("" + time);
@@ -200,8 +221,11 @@ public class mainFrame extends JFrame {
             }
             
         });
+        //starts the timer's countdown.
         easyCountdownTimer.start();
     }
+    
+    //this timer works very similarily to the workout timer.
     public void workoutCountdownBreak(int i,int e) {// e = current round
         workoutPanel.currentExerciseLabel.setText("Break");
         Timer easyCountdownBreak;
@@ -219,6 +243,10 @@ public class mainFrame extends JFrame {
                     time--;
                 }  
                 else {
+                    /*this is one difference between this and the workout timer.
+                    It determines how many more reps are left in the exercise.
+                    If there are none left, it runs the method 'workout assemble.'
+                    */
                     if (exercises == 0 && check) {
                         numberOfExercises--;
                         workoutPanel.timeExerciseLabel.setText("" + 1);
@@ -240,6 +268,8 @@ public class mainFrame extends JFrame {
         });
         easyCountdownBreak.start();
     }
+    
+    //a simple countdown for the '5,4,3,2,1' 
     public void preWorkoutCountdownClock() {// e = current round
         workoutPanel.currentExerciseLabel.setText("Break");
         Timer easyCountdownBreak;        
@@ -252,11 +282,15 @@ public class mainFrame extends JFrame {
                     workoutCountdownPanel.fiveFourThreeTwoOne.setText("" + time);                    
                     time--;
                 }
+                
+                //At the end of the countdown, it moves to the Workout Panel and calls the 'workout assemble' method.
                 else if (check){
                     CardLayout cardLayout = (CardLayout) back.getLayout();
                     cardLayout.show(back, "Workout Panel");
+                    //fills in the global variables 'numberOfExercises' and 'currentIntensity'
                     numberOfExercises = randomSelectPanel.exerciseSlider.getValue();
                     currentIntensity = randomSelectPanel.intensitySlider.getValue();
+                    //creates a linked list in the global variable 'workoutStrings' with the number of exercises selected.
                     workoutString(numberOfExercises);
                     workoutAssemble(randomSelectPanel.intensitySlider.getValue());
                     check = false;           
@@ -268,11 +302,13 @@ public class mainFrame extends JFrame {
         easyCountdownBreak.start();
     }    
     
+    //fills in the workoutTimeLeftClock label and starts the countdown.
     public void workoutTimeLeftClock(int i) {//i = difficulty e = # of exercises 
         Timer workoutTime = new Timer(timerTotal, new ActionListener() {
             int time = i;
             public void actionPerformed(ActionEvent e) {
                 if (time > 0) {
+                    //this if statement here ensures that it always has two values following the semicolon in the time.
                     if (time % 60 >= 10) {
                         workoutPanel.timeWorkoutLabel.setText("" + time / 60 + ":" + time % 60);
                     }
@@ -290,10 +326,13 @@ public class mainFrame extends JFrame {
         workoutTime.start();
     }
     
+    //this method determines how long a workout will be.
     public int getTotalTime(int i) {
+        //timeCalc will be the value returned at the end of the method.
         int timeCalc = 0;
         int e = numberOfExercises - 3;
-        switch (i) {//check medulo of rounds
+        //each switch determines what the overall time will be based on the intensity selected (i) and how many reps per exercise.
+        switch (i) {
             case 1:  
                 timeCalc = numberOfExercises * 135;
                      break;
@@ -304,7 +343,7 @@ public class mainFrame extends JFrame {
                     timeCalc = timeCalc + 135;
                     e--;
                 }
-                else if (e == 3) {
+                else {
                     timeCalc = timeCalc + 240;
                     e--;
                 }
@@ -313,11 +352,11 @@ public class mainFrame extends JFrame {
             case 3:
                 timeCalc = 615;
                 while (e > 0) {
-                if (e == 1) {
+                if (e == 3) {
                     timeCalc = timeCalc + 135;
                     e--;
                 }
-                else if (e == 3 || e == 2) {
+                else {
                     timeCalc = timeCalc + 240;
                     e--;
                 }
@@ -343,11 +382,11 @@ public class mainFrame extends JFrame {
                 timeCalc = 825;
                 while (e > 0) {
             switch (e) {
-                case 1:
+                case 2:
                     timeCalc = timeCalc + 135;
                     e--;
                     break;
-                case 2:
+                case 1:
                     timeCalc = timeCalc + 240;
                     e--;
                     break;
@@ -374,11 +413,11 @@ public class mainFrame extends JFrame {
             case 8:  
                 timeCalc = 1035;
                 while (e > 0) {
-                if (e == 1) {
+                if (e == 3) {
                     timeCalc = timeCalc + 135;
                     e--;
                 }
-                else if (e == 3 || e == 2) {
+                else {
                     timeCalc = timeCalc + 450;
                     e--;
                 }
@@ -387,11 +426,11 @@ public class mainFrame extends JFrame {
             case 9:
                 timeCalc = 1140;
                 while (e > 0) {
-                if (e == 1) {
+                if (e == 3) {
                     timeCalc = timeCalc + 240;
                     e--;
                 }
-                else if (e == 3 || e == 2) {
+                else {
                     timeCalc = timeCalc + 450;
                     e--;
                 }
@@ -408,34 +447,47 @@ public class mainFrame extends JFrame {
         return timeCalc;
     }
     
-    public int randomWorkoutNumber() {//0-4
+    public int randomWorkoutNumber() {
+        //gets a random number between 0 and 4
         double i = Math.random()*5.0;
         int answer = (int) i;
         return answer;
     }
     
-    public void workoutString(int e) {//[category][workout] also make case for none selected.
+    public void workoutString(int e) {//[category][workout]
+        //This method builds the linked list 'workoutStrings'
+        
+        //First, check to make which types of workouts are selected.
         boolean noWeights = randomSelectPanel.noWeightBox.isSelected();
         boolean weights = randomSelectPanel.weightBox.isSelected();
         boolean trx = randomSelectPanel.TRXBox.isSelected();
         boolean medBall = randomSelectPanel.medicineBallBox.isSelected();
         boolean ball = randomSelectPanel.ballBox.isSelected();
+        
+        //make a 2D array that stores two values that relate to the 'workoutData' 2D array.
+        //This will be used to make sure the same workout is not done twice in a row.
         int[][] workoutNumbers = new int[e][2];
         int exercises = e;
         while (e > 0) {
             int j = randomWorkoutNumber();
+            //this switch statements goes to the category randomly selected by the method above.
             switch (j) {
                 case 0:
                     if (noWeights) {
+                        //i represents the number of different types of workouts available in the type of exercise
                         double i = Math.random()*8.0;
                         int currentNumber = (int) (i+1);
+                        //fail tries to catch whether or not a certain workout has been selected yet.
                         boolean fail = false;
+                        //this for loop runs through the workoutNumbers 2D array and tries to check if the current
+                        //selected has been done before.
                         for (int test = 0; test < exercises; test++) {
                             System.out.println("j = " + j + " = " + workoutNumbers[test][0] + " currentNumber = " + currentNumber + " = " + workoutNumbers[test][1] );
                             if (j == workoutNumbers[test][0] && currentNumber == workoutNumbers[test][1]) {
                                 fail = true;
                             }
                         }
+                        //this runs if fail is not true at the end of the loop.
                         if (!fail) {
                             workoutNumbers[e-1][0] = j;
                             workoutNumbers[e-1][1] = currentNumber;
@@ -443,12 +495,14 @@ public class mainFrame extends JFrame {
                             workoutStrings.add(workoutData[j][currentNumber]);
                             e--;
                         }
+                        //otherwise, this runs.
                         else {
                             System.out.println(workoutData[j][currentNumber]);
                             System.out.println("Fail");                            
                         }
                     }
                     break;
+                    //all other cases work in the same way.
                 case 1:
                     if (weights) {
                         double i = Math.random()*6.0;
@@ -551,7 +605,7 @@ public class mainFrame extends JFrame {
       
     }
     
-    public void workoutAssemble(int i) {//make String
+    public void workoutAssemble(int i) {
         //i = intensity 
         /* Intensity works in sets of three
         easy = 45 x 3 = 135
@@ -559,23 +613,26 @@ public class mainFrame extends JFrame {
         hard = 75 x 6 = 450
         1 - 3 easy 1:30 x3 = 4:30
         2 - 2 easy 1 med 1:00 x3 + 0:45 x4 = 6:00
-        3 - 2 easy 1 hard 1:00 x 3 + 1:00 x 6 = 9:00
+        3 - 1 easy 2 med 1:00 x 3 + 1:00 x 6 = 9:00
         4 - 1 easy 2 med 0:30 x 3 + 1:30 x4 = 9:00
         5 - 3 med 2:15 x 4 = 9:15
         6 - 1 easy 1 med 1 hard 0:30 x 3 + 0:45 x 4 + 1:00 x 6 = 10:30
         7 - 2 med 1 hard 1:30 x4 + 1:00 x6 = 12:30
         8 - 1 easy 2 hard 0:30 x3 + 2:00 x6 = 13:30
         9 - 1 med 2 hard 0:45 x4 + 2:00 x6 = 15:00
-        10 - 3 hard 3:00 x6 = 18:00
-        
+        10 - 3 hard 3:00 x6 = 18:00        
         */
+        //This will only run the first time workoutAssemble is called to get the total countdown clock
+        //going and saves the total number of workouts to the object storing the workout data. (a)
         if (workoutStart) {
             workoutTimeLeftClock(getTotalTime(i));
             workoutStart = false;
             a.getHowManyWorkouts();
         }
-        
+        //this loop will run if there are more exercises left to do in the program.
         if (numberOfExercises > 0) {
+            //each of these is called depending on the intensity and number of exercises remaining to
+            //start the workout countdown clock.
    switch (currentIntensity) {//check medulo of rounds
             case 1:
                 intensityTester.add(3);
@@ -668,6 +725,7 @@ public class mainFrame extends JFrame {
                      break;
         }
         }
+        //this runs when everything else is done and moves to the summary screen and fills all the data in.
         else {
             CardLayout cardLayout = (CardLayout) back.getLayout();
             cardLayout.show(back, "Workout Summary Panel");
