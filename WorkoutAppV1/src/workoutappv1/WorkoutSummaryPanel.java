@@ -4,10 +4,6 @@
  * and open the template in the editor.
  */
 package workoutappv1;
-
-import java.awt.Color;
-import java.awt.Font;
-
 /**
  *
  * @author jdvan

@@ -16,7 +16,6 @@ import java.awt.event.*;
 import java.util.LinkedList;
 import java.io.*;
 import javax.sound.sampled.*;
-//import sun.audio.*; does not recognize and idk why
 /**
  *
  * @author jdvan
@@ -30,13 +29,13 @@ public class mainFrame extends JFrame {
     private static WorkoutSummaryPanel workoutSummaryPanel;
     private static JFrame frame;
     private static JPanel back;
-    public int timerTotal = 10;
+    public int timerTotal = 1000;
     public int numberOfExercises = 0;
     public int currentIntensity = 0;
     public boolean workoutStart = true;
     public int totalTimeCounter;
     public LinkedList<String> workoutStrings = new LinkedList<String>();
-    public LinkedList<Integer> intensityTester = new LinkedList<Integer>();
+    public LinkedList<Integer> intensityList = new LinkedList<Integer>();
     public savedWorkout a = new savedWorkout();
     //This is where to change workouts. Order from top to bottom is: No weight, No Equipment, TRX, Medicine Ball, Yoga Ball
     public String[][] workoutData = {
@@ -68,7 +67,7 @@ public class mainFrame extends JFrame {
         //add back to frame
         frame.add(back);
         
-        //initialize frame
+        //setup frame
         frame.setSize(600,600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -114,8 +113,9 @@ public class mainFrame extends JFrame {
         
         //this will fill in the Workout Summary Panel created at the beginning.
         public void fillInSummary() {
-            diffIntensity = intensityTester;
+            diffIntensity = intensityList;
             theExercises = workoutStrings;
+            System.out.println(theExercises);
             System.out.println(diffIntensity);
             
             //This loop will fill the table row by row
@@ -271,7 +271,6 @@ public class mainFrame extends JFrame {
     
     //a simple countdown for the '5,4,3,2,1' 
     public void preWorkoutCountdownClock() {// e = current round
-        workoutPanel.currentExerciseLabel.setText("Break");
         Timer easyCountdownBreak;        
         easyCountdownBreak = new Timer(timerTotal, new ActionListener() {//change number to 1000 for final
             int time = 4;
@@ -635,90 +634,90 @@ public class mainFrame extends JFrame {
             //start the workout countdown clock.
    switch (currentIntensity) {//check medulo of rounds
             case 1:
-                intensityTester.add(3);
+                intensityList.add(3);
                 workoutCountdownClock(1, 3);
                             //System.out.println(i + "lvl 1");
                      break;
             case 2:
                 if (numberOfExercises % 3 > 0) {
-                    intensityTester.add(3);
+                    intensityList.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else {
-                    intensityTester.add(4);
+                    intensityList.add(4);
                     workoutCountdownClock(2,4);
                 }
                      break;
             case 3: 
                 if (numberOfExercises % 3 > 1) {
-                    intensityTester.add(3);
+                    intensityList.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else {
-                    intensityTester.add(4);
+                    intensityList.add(4);
                     workoutCountdownClock(2,4);
                 }                
                      break;
             case 4:  
                 if (numberOfExercises % 3 > 0) {
-                    intensityTester.add(3);
+                    intensityList.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else {
-                    intensityTester.add(6);
+                    intensityList.add(6);
                     workoutCountdownClock(3,6);
                 }
                      break;
             case 5:
-                intensityTester.add(4);
+                intensityList.add(4);
                 workoutCountdownClock(2,4);
                      break;
             case 6:  
                 if (numberOfExercises % 3 > 1) {
-                    intensityTester.add(3);
+                    intensityList.add(3);
                     workoutCountdownClock(1,3);
                 }
                 else if (numberOfExercises % 3 == 0) {
-                    intensityTester.add(6);
+                    intensityList.add(6);
                     workoutCountdownClock(3,6);
                 }
                 else {
-                    intensityTester.add(4);
+                    intensityList.add(4);
                     workoutCountdownClock(2,4);
                 }
                      break;
             case 7:  
                 if (numberOfExercises % 3 > 0) {
-                    intensityTester.add(4);
+                    intensityList.add(4);
                     workoutCountdownClock(2,4);
                 }
                 else {
-                    intensityTester.add(6);
+                    intensityList.add(6);
                     workoutCountdownClock(3,6);
                 }
                      break;
             case 8: 
                 if (numberOfExercises % 3 > 1) {
-                    intensityTester.add(3);
+                    intensityList.add(3);
                     workoutCountdownClock(1,3); 
                 }
                 else {
-                    intensityTester.add(6);
+                    intensityList.add(6);
                     workoutCountdownClock(3,6);
                 }
                      break;
             case 9: 
                 if (numberOfExercises % 3 > 1) {
-                    intensityTester.add(4);
+                    intensityList.add(4);
                     workoutCountdownClock(2,4);
                 }
                 else {
-                    intensityTester.add(6);
+                    intensityList.add(6);
                     workoutCountdownClock(3,6); 
                 }                
                      break;
             case 10:
-                intensityTester.add(6);
+                intensityList.add(6);
                 workoutCountdownClock(3,6);             
                      break;
             default:

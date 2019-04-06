@@ -14,6 +14,9 @@ public class RandomSelectPanel extends javax.swing.JPanel {
     /**
      * Creates new form RandomSelectPanel
      * 
+     * @param i
+     * @param e
+     * @return 
      */
         //Very similar to the method within the main class
         public int getTotalTime(int i, int e) {
